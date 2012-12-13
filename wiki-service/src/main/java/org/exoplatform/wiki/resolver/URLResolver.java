@@ -5,6 +5,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.organization.OrganizationService;
@@ -73,15 +74,15 @@ public class URLResolver extends Resolver{
         }
       }
     }else{
-      if (portalUserNode != null && portalUserNode.getPageRef() != null
-          && !portalUserNode.getPageRef().startsWith(PortalConfig.PORTAL_TYPE)) {
-        String[] components = Utils.split("::", portalUserNode.getPageRef());
+    	if (portalUserNode != null && portalUserNode.getPageRef() != null
+          && !portalUserNode.getPageRef().toString().startsWith(PortalConfig.PORTAL_TYPE)) {
+        String[] components = Utils.split("::", portalUserNode.getPageRef().toString());
         params.setType(components[0]);
         params.setOwner(components[1]);
       } else {
         params.setType(PortalConfig.PORTAL_TYPE);
-        Page page = configService.getPage(portalUserNode.getPageRef(), ConversationState.getCurrent().getIdentity().getUserId());
-        params.setOwner(page.getOwnerId());
+        PageContext pageContext = configService.getPage(portalUserNode.getPageRef());
+        params.setOwner(pageContext.getKey().getSite().getName());
       }
       if (uri.length() > 0)
         params.setPageId(uri);
