@@ -16,14 +16,18 @@
  */
 package org.exoplatform.wiki.mow.core.api;
 
+import java.util.Collection;
 import java.util.Iterator;
 
+import org.exoplatform.services.organization.GroupHandler;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.wiki.chromattic.ext.ntdef.NTFrozenNode;
 import org.exoplatform.wiki.chromattic.ext.ntdef.NTVersion;
 import org.exoplatform.wiki.mow.api.WikiNodeType;
 import org.exoplatform.wiki.mow.api.WikiType;
 import org.exoplatform.wiki.mow.core.api.wiki.AttachmentImpl;
 import org.exoplatform.wiki.mow.core.api.wiki.PageImpl;
+import org.junit.Assert;
 
 /**
  * Created by The eXo Platform SAS
@@ -81,4 +85,10 @@ public class TestVersioning extends AbstractMOWTestcase {
     assertNotNull(frozenNode.getAuthor());
   }
 
+  public void testOrg() throws Exception {
+     OrganizationService organizationService = (OrganizationService) container.getComponentInstance(OrganizationService.class);
+     GroupHandler handler = organizationService.getGroupHandler();
+     Collection allGroups = handler.findGroups(null);
+     Assert.assertTrue(allGroups.size() > 0);
+  }
 }
