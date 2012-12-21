@@ -23,6 +23,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import junit.framework.TestCase;
@@ -31,12 +32,15 @@ import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.organization.GroupHandler;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityConstants;
 import org.exoplatform.wiki.bench.WikiDataInjector.CONSTANTS;
 import org.exoplatform.wiki.mow.core.api.wiki.PageImpl;
 import org.exoplatform.wiki.service.WikiService;
+import org.junit.Assert;
 
 /**
  * Created by The eXo Platform SAS
@@ -177,4 +181,10 @@ public class TestWikiDataInjector extends TestCase {
     assertTrue(injector.getPagesByPrefix("e", wikiHome).size() == 0);
   }
 
+  public void testOrg() throws Exception {
+     OrganizationService organizationService = (OrganizationService) container.getComponentInstance(OrganizationService.class);
+     GroupHandler handler = organizationService.getGroupHandler();
+     Collection allGroups = handler.findGroups(null);
+     Assert.assertTrue(allGroups.size() > 0);
+  }
 }
